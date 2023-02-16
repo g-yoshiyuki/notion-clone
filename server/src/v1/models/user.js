@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+
+// ※スキーマ → どのようなデータを格納するのかの定義
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
