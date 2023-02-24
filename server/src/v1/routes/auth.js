@@ -1,13 +1,13 @@
 const router = require("express").Router();
-const { body } = require("express-validator");
+const { check,body } = require("express-validator");
 const User = require("../models/user");
 const validation = require("../handlers/validation");
 const userController = require("../controllers/user");
 const tokenHandler = require("../handlers/tokenHandler")
 
-// ユーザー新規登録
+// ユーザー新規登録API
 // "/register" を指定することで、
-// Postmanからhttp://localhost:3020/api/v1/registerにアクセスすることで下記APIをテストできる。
+// Postmanからhttp://localhost:3020/api/v1/auth/registerにアクセスすることで下記APIをテストできる。
 router.post(
   "/register",
   body("username")
@@ -28,6 +28,14 @@ router.post(
       }
     });
   }),
+  check('password')
+  .custom((value, { req }) => {
+    if(req.body.password !== req.body.confirmPassword) {
+      throw new Error('パスワード（確認）と一致しません。');
+    }
+    return true;
+  }),
+
   validation.validate,
   userController.register
 );
