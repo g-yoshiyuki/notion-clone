@@ -33,10 +33,10 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ username: username });
     if (!user) {
       res.status(401).json({
-        errors: {
+        errors: [{
           param: "username",
-          message: "ユーザー名が無効です",
-        },
+          msg: "ユーザー名が無効です",
+        }],
       });
     }
     // パスワードの照合
@@ -47,10 +47,10 @@ exports.login = async (req, res) => {
     ).toString(CryptoJS.enc.Utf8);
     if (decryptedPassword !== password) {
       return res.status(401).json({
-        errors: {
+        errors: [{
           param: "password",
-          message: "パスワードが無効です",
-        },
+          msg: "パスワードが無効です",
+        }],
       });
     }
     // 上記に引っ掛からなければ、jwtの発行
