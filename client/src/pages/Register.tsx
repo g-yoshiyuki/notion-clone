@@ -53,6 +53,7 @@ const Register = () => {
         confirmPassword,
       });
       localStorage.setItem("token", res.token);
+      console.log(res.token);
       setLoading(false);
       alert("新規登録に成功しました");
       navigate("/");
