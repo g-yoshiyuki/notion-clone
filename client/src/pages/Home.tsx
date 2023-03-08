@@ -1,9 +1,10 @@
 import { LoadingButton } from "@mui/lab";
 import { Box } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import memoApi from "../api/memoApi";
+import memoApi from "../api/memoApi";
+import { setMemo } from "../redux/features/memoSlice";
 // import { setMemo } from "../redux/features/memoSlice";
 
 const Home = () => {
@@ -11,20 +12,19 @@ const Home = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
 
-  //📝の作成
+  //メモの作成
   const createMemo = async () => {
-    // setLoading(true);
-    // try {
-    //   console.log("clicked");
-    //   const res = await memoApi.create();
-    //   console.log(res);
-    //   dispatch(setMemo(res));
-    //   navigate(`/memo/${res.id}`); //memoに割り振られたidをパスに設定
-    // } catch (err) {
-    //   alert(err);
-    // } finally {
-    //   setLoading(false);
-    // }
+    setLoading(true);
+    try {
+      const res = await memoApi.create();
+      setLoading(false);
+      // 下記コードはmemoSliceの値を上書きする。追加したい場合はスプレッド構文を使用する
+      dispatch(setMemo([res]));
+      navigate(`/memo/${res._id}`);
+    } catch (err) {
+      alert(err);
+      setLoading(false);
+    }
   };
 
   return (

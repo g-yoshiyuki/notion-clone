@@ -1,7 +1,9 @@
 import axios from "axios";
+// このファイルについて。Axiosのインスタンスを作成し、サーバーへAPIリクエストを送信するための関数をまとめたもの。
 
 // サーバーURL
 // server/index.jsで、下記URLで./src/v1/routesにアクセスするように設定している。
+// ./src/v1/routesにルーティング設定をまとめている。
 const BASE_URL = "http://localhost:3020/api/v1";
 
 // クライアントからサーバーにAPIを叩くaxiosインスタンスを生成。

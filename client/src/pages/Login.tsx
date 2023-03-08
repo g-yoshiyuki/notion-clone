@@ -1,6 +1,6 @@
 import LoadingButton from '@mui/lab/LoadingButton'
 import { Box, Button, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link,useNavigate } from 'react-router-dom';
 import authApi from '../api/authApi';
 
@@ -23,14 +23,10 @@ const Login = () => {
     const username = data.get("username")?.toString().trim();
     const password = data.get("password")?.toString().trim();
 
-    let error = false;
-
     if (username === "") {
-      error = true;
       setUsernameErrText("名前を入力してください。");
     }
     if (password === "") {
-      error = true;
       setPasswordErrText("パスワードを入力してください。");
     }
     setLoading(true);

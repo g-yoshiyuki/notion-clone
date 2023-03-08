@@ -14,8 +14,9 @@ const AuthLayout = () => {
       //ページ切り替える度に認証チェック(トークン持ってるかどうか確認)
       const isAuth = await authUtils.isAuthenticated();
       if (isAuth) {
+        // AuthLayoutの下にあるAppLayout が表示される
         navigate("/");
-      } 
+      }
     }
     checkAuth();
   },[navigate])
@@ -23,7 +24,7 @@ const AuthLayout = () => {
     <div>
       <Container component="main" maxWidth="xs">
         <Box
-          // sxで直接スタイルを定義できる。使い回さないスタイルに有効
+          // sxで直接スタイルを定義できる(materialUi)。使い回さないスタイルに有効
           sx={{
             marginTop: 6,
             display: "flex",
@@ -34,6 +35,7 @@ const AuthLayout = () => {
           <img
             src={notionLogo}
             alt=""
+            // styleはReactのstyle属性
             style={{ width: 100, marginBottom: 2 }}
           />
           Notionクローン開発
