@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import memoApi from "../api/memoApi";
 import { AxiosResponse } from "axios";
 import { setMemo } from "../redux/features/memoSlice";
+import EmojiPicker from "../components/common/EmojiPicker";
 
 const Memo = () => {
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const Memo = () => {
   }, [memoId]);
 
   // 入力ごとにAPIを叩かないように、500sのタイムラグをつくっている。
-  let timer:NodeJS.Timeout
+  let timer: NodeJS.Timeout;
   const timeout = 500;
   const updateTitle = async (e: React.ChangeEvent<HTMLInputElement>) => {
     // timerにセットされた時間をリセットする。
@@ -78,7 +79,7 @@ const Memo = () => {
       //   dispatch(setFavoriteList(newFavoriteMemos));
       // }
 
-      const newMemos = await memos.filter((memo:any) => memo._id !== memoId);
+      const newMemos = await memos.filter((memo: any) => memo._id !== memoId);
       if (newMemos.length === 0) {
         navigate("/memo");
       } else {
@@ -90,6 +91,21 @@ const Memo = () => {
     }
   };
 
+  const onIconChange = async (newIcon:string) => {
+    // memosのコピーを作成
+    let temp = [...memos];
+    // 条件に該当する配列のindex番号を返す。なければ-1を返す。
+    const index = temp.findIndex((e) => e._id === memoId);
+    // temp[index]に該当するオブジェクトのプロパティiconを上書きしている。
+    temp[index] = { ...temp[index], icon: newIcon };
+    setIcon(newIcon);
+    dispatch(setMemo(temp));
+    try {
+      await memoApi.update(memoId!, { icon: newIcon });
+    } catch (err) {
+      alert(err);
+    }
+  };
 
   return (
     <>
@@ -108,31 +124,34 @@ const Memo = () => {
         </IconButton>
       </Box>
       <Box sx={{ padding: "10px 50px" }}>
-        <TextField
-          value={title}
-          onChange={updateTitle}
-          placeholder="無題"
-          variant="outlined"
-          fullWidth
-          sx={{
-            // マテリアルUIでデフォルトであたっているclassのスタイルを上書きしている
-            ".MuiOutlinedInput-input": { padding: 0 },
-            ".MuiOutlinedInput-notchedOutline": { border: "unset" },
-            ".MuiOutlinedInput-root": { fontSize: "2rem", fontWeight: "700" },
-          }}
-        />
-        <TextField
-          value={description}
-          onChange={updateDescription}
-          placeholder="追加"
-          variant="outlined"
-          fullWidth
-          sx={{
-            ".MuiOutlinedInput-input": { padding: 0 },
-            ".MuiOutlinedInput-notchedOutline": { border: "unset" },
-            ".MuiOutlinedInput-root": { fontSize: "0,8rem" },
-          }}
-        />
+        <Box>
+          <EmojiPicker icon={icon} onChange={onIconChange}/>
+          <TextField
+            value={title}
+            onChange={updateTitle}
+            placeholder="無題"
+            variant="outlined"
+            fullWidth
+            sx={{
+              // マテリアルUIでデフォルトであたっているclassのスタイルを上書きしている
+              ".MuiOutlinedInput-input": { padding: 0 },
+              ".MuiOutlinedInput-notchedOutline": { border: "unset" },
+              ".MuiOutlinedInput-root": { fontSize: "2rem", fontWeight: "700" },
+            }}
+          />
+          <TextField
+            value={description}
+            onChange={updateDescription}
+            placeholder="追加"
+            variant="outlined"
+            fullWidth
+            sx={{
+              ".MuiOutlinedInput-input": { padding: 0 },
+              ".MuiOutlinedInput-notchedOutline": { border: "unset" },
+              ".MuiOutlinedInput-root": { fontSize: "0,8rem" },
+            }}
+          />
+        </Box>
       </Box>
     </>
   );

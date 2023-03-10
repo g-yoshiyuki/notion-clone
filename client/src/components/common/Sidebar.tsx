@@ -34,7 +34,6 @@ const Sidebar = () => {
     const getMemos = async () => {
       try {
         const res = await memoApi.getAll();
-        // console.log(res);
         //状態をグローバルに保存
         dispatch(setMemo(res));
       } catch (err) {
@@ -52,7 +51,6 @@ const Sidebar = () => {
   const createMemo = async () => {
     try {
       const res = await memoApi.create();
-      console.log(res)
       dispatch(setMemo([res, ...memos]));
       // navigate(`/memo/${res._id}`); //memoに割り振られたidをパスに設定
     } catch (err) {
@@ -122,7 +120,7 @@ const Sidebar = () => {
             <Typography variant="body2" fontWeight="700">
               プライベート
             </Typography>
-            <IconButton>
+            <IconButton onClick={() => createMemo()}>
               <AddBoxOutlinedIcon fontSize="small" />
             </IconButton>
           </Box>
@@ -146,10 +144,6 @@ const Sidebar = () => {
               <Typography variant="body2" fontWeight="700">
                 {item.icon} {item.title}
               </Typography>
-              <IconButton onClick={() => createMemo()}>
-              {/* <IconButton> */}
-                <AddBoxOutlinedIcon fontSize="small" />
-              </IconButton>
             </Box>
           </ListItemButton>
         ))}
